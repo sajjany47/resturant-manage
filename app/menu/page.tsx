@@ -375,7 +375,7 @@ export default function MenuPage() {
                   onSubmit={handleSubmit}
                   enableReinitialize
                 >
-                  {({ values, setFieldValue, errors, touched }) => {
+                  {({ values, setFieldValue }) => {
                     const totalCost = values.expenses.reduce(
                       (sum, expense) => sum + expense.cost,
                       0
@@ -539,7 +539,7 @@ export default function MenuPage() {
                                         Total Cost:
                                       </span>
                                       <span className="text-xl font-bold text-blue-900">
-                                        ₹{totalCost.toFixed(2)}
+                                        ₹{totalCost}
                                       </span>
                                     </div>
                                   </div>
