@@ -2,7 +2,7 @@
 
 import AuthGuard from "@/components/auth/AuthGuard";
 import UserProfile from "@/components/auth/UserProfile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -49,30 +49,13 @@ import {
 import Link from "next/link";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { MenuCreate, MenuUpdate } from "../MainService";
+import { MenuCreate, MenuList, MenuUpdate } from "../MainService";
 import { toast } from "sonner";
 import CustomLoader from "@/components/CustomLoader";
 
 interface ExpenseItem {
   name: string;
   cost: number;
-}
-
-interface MenuItem {
-  id: string;
-  name: string;
-  category: string;
-  expenses: ExpenseItem[];
-  totalCost: number;
-  desiredProfit: number;
-  zomatoPrice: number;
-  swiggyPrice: number;
-  offlinePrice: number;
-  onlinePrice: number;
-  stock: number;
-  minStock: number;
-  description: string;
-  isAvailable: boolean;
 }
 
 interface PlatformCommission {
@@ -120,8 +103,27 @@ export default function MenuPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchTicketList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchTicketList = () => {
+    setLoading(true);
+    MenuList()
+      .then((res) => {
+        setMenuItems(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        toast.error(err.message || "Failed to get details. Please try again.");
+      });
+  };
 
   const platformCommissions: PlatformCommission[] = [
     { name: "Zomato", rate: 38, color: "bg-red-100 text-red-800" },
@@ -129,49 +131,6 @@ export default function MenuPage() {
     { name: "Offline", rate: 20, color: "bg-blue-100 text-blue-800" },
     { name: "Online", rate: 25, color: "bg-green-100 text-green-800" },
   ];
-
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
-    {
-      id: "1",
-      name: "Chicken Momo",
-      category: "Starters",
-      expenses: [
-        { name: "Making Cost", cost: 28 },
-        { name: "Packaging Cost", cost: 5 },
-        { name: "Electricity Cost", cost: 10 },
-      ],
-      totalCost: 43,
-      desiredProfit: 30,
-      zomatoPrice: 118,
-      swiggyPrice: 118,
-      offlinePrice: 91,
-      onlinePrice: 97,
-      stock: 25,
-      minStock: 10,
-      description: "Steamed chicken dumplings with spicy sauce",
-      isAvailable: true,
-    },
-    {
-      id: "2",
-      name: "Margherita Pizza",
-      category: "Pizza",
-      expenses: [
-        { name: "Making Cost", cost: 120 },
-        { name: "Packaging Cost", cost: 15 },
-        { name: "Electricity Cost", cost: 25 },
-      ],
-      totalCost: 160,
-      desiredProfit: 80,
-      zomatoPrice: 387,
-      swiggyPrice: 387,
-      offlinePrice: 300,
-      onlinePrice: 320,
-      stock: 15,
-      minStock: 8,
-      description: "Fresh tomatoes, mozzarella cheese, basil leaves",
-      isAvailable: true,
-    },
-  ]);
 
   const categories = [
     "all",
@@ -217,7 +176,7 @@ export default function MenuPage() {
     );
     const prices = calculatePlatformPrices(totalCost, values.desiredProfit);
 
-    const newItem: MenuItem = {
+    const newItem: any = {
       // id: editingItem ? editingItem.id : Date.now().toString(),
       name: values.name,
       category: values.category,
@@ -267,19 +226,19 @@ export default function MenuPage() {
     }
   };
 
-  const handleEditItem = (item: MenuItem) => {
+  const handleEditItem = (item: any) => {
     setEditingItem(item);
     setIsAddDialogOpen(true);
   };
 
   const handleDeleteItem = (id: string) => {
-    setMenuItems(menuItems.filter((item) => item.id !== id));
+    setMenuItems(menuItems.filter((item) => item._id !== id));
   };
 
   const toggleAvailability = (id: string) => {
     setMenuItems(
       menuItems.map((item) =>
-        item.id === id ? { ...item, isAvailable: !item.isAvailable } : item
+        item._id === id ? { ...item, isAvailable: !item.isAvailable } : item
       )
     );
   };
@@ -806,7 +765,7 @@ export default function MenuPage() {
 
               return (
                 <Card
-                  key={item.id}
+                  key={item._id}
                   className="hover:shadow-lg transition-shadow"
                 >
                   <CardHeader className="pb-3">
@@ -839,7 +798,7 @@ export default function MenuPage() {
                         Expense Breakdown
                       </h5>
                       <div className="space-y-1 text-sm">
-                        {item.expenses.map((expense, index) => (
+                        {item.expenses.map((expense: any, index: any) => (
                           <div key={index} className="flex justify-between">
                             <span className="text-gray-600">
                               {expense.name}:
@@ -910,7 +869,7 @@ export default function MenuPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => toggleAvailability(item.id)}
+                          onClick={() => toggleAvailability(item._id)}
                           className={
                             item.isAvailable
                               ? "text-red-600 hover:text-red-700"
@@ -922,7 +881,7 @@ export default function MenuPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteItem(item.id)}
+                          onClick={() => handleDeleteItem(item._id)}
                           className="text-red-600 hover:text-red-700"
                         >
                           <Trash2 className="w-4 h-4" />

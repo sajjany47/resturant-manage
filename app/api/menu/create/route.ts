@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import dbConnect from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import Menu from "../menuModel";
@@ -11,7 +9,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const data = await req.json();
-    console.log(data);
+
     // Check for duplicate by name + category (you can adjust logic as needed)
     const existing = await Menu.findOne({
       name: data.name,
