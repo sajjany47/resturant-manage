@@ -183,7 +183,6 @@ export default function MenuPage() {
     const prices = calculatePlatformPrices(totalCost, values.desiredProfit);
 
     const newItem: any = {
-      // id: editingItem ? editingItem.id : Date.now().toString(),
       name: values.name,
       category: values.category,
       description: values.description,
@@ -224,7 +223,6 @@ export default function MenuPage() {
           toast.error(err.message || "Failed to create menu item ❌");
           setLoading(false);
         });
-      // setMenuItems([...menuItems, newItem]);
     }
   };
 
