@@ -146,6 +146,13 @@ export default function MenuPage() {
     "Desserts",
     "Beverages",
     "Breads",
+    "Momo",
+  ];
+  const restaurantExpenses = [
+    { label: "Cost", value: "cost" },
+    { label: "Electric", value: "electric" },
+    { label: "Packaging", value: "packaging" },
+    { label: "Sauce", value: "sauce" },
   ];
 
   // Calculate platform prices based on total cost and desired profit
