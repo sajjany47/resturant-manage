@@ -148,13 +148,6 @@ export default function MenuPage() {
     "Breads",
     "Momo",
   ];
-  const restaurantExpenses = [
-    { label: "Making Cost", value: "cost" },
-    { label: "Electric", value: "electric" },
-    { label: "Packaging", value: "packaging" },
-    { label: "Sauce", value: "sauce" },
-    { label: "Other", value: "other" },
-  ];
 
   // Calculate platform prices based on total cost and desired profit
   const calculatePlatformPrices = (
@@ -284,7 +277,12 @@ export default function MenuPage() {
         name: "",
         category: "",
         description: "",
-        expenses: [{ name: "", cost: 0 }],
+        expenses: [
+          { name: "Making Cost", cost: 0 },
+          { name: "Electric", cost: 0 },
+          { name: "Packaging", cost: 0 },
+          { name: "Sauce", cost: 0 },
+        ],
         desiredProfit: 0,
         stock: 0,
         minStock: 0,
