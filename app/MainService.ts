@@ -33,3 +33,16 @@ export const MenuList = async () => {
     throw new Error(error.response?.data?.message);
   }
 };
+
+export const DeleteMenuItem = async (id: string) => {
+  try {
+    const response = await axios.delete(`/api/menu/${id}`, {
+      headers: getHeaders(),
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to delete menu item"
+    );
+  }
+};

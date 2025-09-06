@@ -49,9 +49,15 @@ import {
 import Link from "next/link";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { MenuCreate, MenuList, MenuUpdate } from "../MainService";
+import {
+  DeleteMenuItem,
+  MenuCreate,
+  MenuList,
+  MenuUpdate,
+} from "../MainService";
 import { toast } from "sonner";
 import CustomLoader from "@/components/CustomLoader";
+import { set } from "mongoose";
 
 interface ExpenseItem {
   name: string;
@@ -110,7 +116,7 @@ export default function MenuPage() {
   useEffect(() => {
     fetchTicketList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAddDialogOpen]);
 
   const fetchTicketList = () => {
     setLoading(true);
@@ -206,10 +212,6 @@ export default function MenuPage() {
           setLoading(false);
           toast.error(err.message || "Failed to update menu item ❌");
         });
-      // setMenuItems(
-      //   menuItems.map((item) => (item.id === editingItem.id ? newItem : item))
-      // );
-      // setEditingItem(null);
     } else {
       MenuCreate({ ...newItem })
         .then((res) => {
@@ -232,6 +234,17 @@ export default function MenuPage() {
   };
 
   const handleDeleteItem = (id: string) => {
+    setLoading(true);
+    DeleteMenuItem(id)
+      .then((res) => {
+        toast.success(res.message || "Menu item deleted successfully 🎉");
+        fetchTicketList();
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        toast.error(err.message || "Failed to delete menu item ❌");
+      });
     setMenuItems(menuItems.filter((item) => item._id !== id));
   };
 

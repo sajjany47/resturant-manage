@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        menu: items,
+        data: items,
         count: items.length,
       },
       { status: 200 }
