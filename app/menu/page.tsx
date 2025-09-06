@@ -279,9 +279,9 @@ export default function MenuPage() {
         description: "",
         expenses: [
           { name: "Making Cost", cost: 0 },
-          { name: "Electric", cost: 0 },
-          { name: "Packaging", cost: 0 },
-          { name: "Sauce", cost: 0 },
+          { name: "Electric", cost: 10 },
+          { name: "Packaging", cost: 6 },
+          { name: "Sauce", cost: 10 },
         ],
         desiredProfit: 0,
         stock: 0,
