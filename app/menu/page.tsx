@@ -149,10 +149,11 @@ export default function MenuPage() {
     "Momo",
   ];
   const restaurantExpenses = [
-    { label: "Cost", value: "cost" },
+    { label: "Making Cost", value: "cost" },
     { label: "Electric", value: "electric" },
     { label: "Packaging", value: "packaging" },
     { label: "Sauce", value: "sauce" },
+    { label: "Other", value: "other" },
   ];
 
   // Calculate platform prices based on total cost and desired profit
